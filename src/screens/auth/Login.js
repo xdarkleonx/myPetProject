@@ -35,18 +35,22 @@ const Login = props => {
    }
 
    return (
-      <ScrollView contentContainerStyle={s.main}>
+      <ScrollView contentContainerStyle={styles.main}>
          <StatusBar barStyle='dark-content' backgroundColor='white' />
          <Image
-            style={s.logo}
-            resizeMode="contain"
+            style={styles.logo}
+            resizeMode='contain'
             source={require('../../assets/img/common/logo.png')}
          />
-         <Text style={s.welcomeText}>{strings.welcome}</Text>
-         <Text style={s.subText}>{strings.tagline}</Text>
+         <Text style={styles.welcomeText}>
+            {strings.welcome}
+         </Text>
+         <Text style={styles.subText}>
+            {strings.tagline}
+         </Text>
          <TextInput
             disableFullscreenUI
-            style={s.textInput}
+            style={styles.textInput}
             maxLength={50}
             selectionColor='#a6c3fe'
             returnKeyType='next'
@@ -58,7 +62,7 @@ const Login = props => {
          <TextInput
             ref={passwordRef}
             disableFullscreenUI
-            style={s.textInput}
+            style={styles.textInput}
             maxLength={50}
             selectionColor='#a6c3fe'
             returnKeyType='done'
@@ -68,50 +72,48 @@ const Login = props => {
          />
          <Button
             disabled={props.isLoading}
-            style={s.button}
+            style={styles.button}
             title={strings.enter}
             activeOpacity={0.9}
-            icon={props.isLoading && authMethod === 'email' ? <ActivityIndicator color='white' /> : null}
+            icon={props.isLoading && authMethod === 'email'
+               ? <ActivityIndicator color='white' />
+               : null
+            }
             onPress={() => tryLogin()}
          />
          <TouchableOpacity
             disabled={props.isLoading}
-            style={s.forgot}
+            style={styles.forgot}
             onPress={() => props.navigation.navigate('ResetPassword')}
          >
-            <Text style={s.forgotText}>{strings.forgot}</Text>
+            <Text style={styles.forgotText}>{strings.forgot}</Text>
          </TouchableOpacity>
-         <Text style={s.warn}>{props.loginWarn?.slice(props.loginWarn.indexOf(' '))}</Text>
-         <View style={s.socialBox}>
-            {/* <Text style={s.socialText}>Войти через</Text> */}
+         <Text style={styles.warn}>
+            {props.loginWarn?.slice(props.loginWarn.indexOf(' '))}
+         </Text>
+         <View style={styles.socialBox}>
             <Button
                disabled={props.isLoading}
-               style={s.facebook}
+               style={styles.facebook}
                title={strings.fbLogin}
                activeOpacity={0.9}
                icon={props.isLoading && authMethod === 'fb'
                   ? <ActivityIndicator color='white' />
-                  : <Icon name="facebook-official" color='white' size={14} />
+                  : <Icon name='facebook-official' color='white' size={14} />
                }
                onPress={() => tryFBLogin()}
             />
-            {/* <Button
-               style={s.google}
-               title='Google'
-               activeOpacity={0.9}
-               icon={<Icon name="google" color='white' size={14} />}
-            /> */}
          </View>
 
-         <View style={s.registerWrapper}>
-            <View style={s.registerBox}>
+         <View style={styles.registerWrapper}>
+            <View style={styles.registerBox}>
                <Text>{strings.noAccount}</Text>
                <TouchableOpacity
                   disabled={props.isLoading}
                   activeOpacity={0.5}
                   onPress={() => goToRegister()}
                >
-                  <Text style={s.registerButton}>{strings.register}</Text>
+                  <Text style={styles.registerButton}>{strings.register}</Text>
                </TouchableOpacity>
             </View>
          </View>
@@ -132,14 +134,13 @@ export default connect(
    }
 )(Login);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
    main: {
       flexGrow: 1,
       backgroundColor: 'white',
       paddingHorizontal: 20,
       paddingTop: 5,
       paddingBottom: 15
-      // paddingVertical: 15
    },
    logo: {
       width: 125,
@@ -154,9 +155,6 @@ const s = StyleSheet.create({
       marginTop: 10
    },
    subText: {
-      // fontSize: 16,
-      // fontWeight: 'bold',
-      // color: '#4f6488',
       alignSelf: 'center',
       marginTop: 5,
       marginBottom: 20
@@ -184,14 +182,12 @@ const s = StyleSheet.create({
    socialText: {
       color: '#9da1a7',
       alignSelf: 'center',
-      // marginTop: 30,
       marginRight: 10
    },
    socialBox: {
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      // marginTop: 10,
       marginTop: 20,
       marginBottom: 20
    },
@@ -201,12 +197,6 @@ const s = StyleSheet.create({
       height: 30,
       paddingLeft: 15
    },
-   // google: {
-   //    flex: 1,
-   //    color: 'white',
-   //    backgroundColor: '#f04337',
-   //    marginLeft: 10
-   // },
    registerWrapper: {
       flex: 1,
       justifyContent: 'flex-end',

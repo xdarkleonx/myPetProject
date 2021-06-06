@@ -34,7 +34,7 @@ const Dish = props => {
   const [nutritionValue, setNutritionValue] = useState();
   const [recepie, setRecepie] = useState([]);
   const lastStepRef = useRef();
-  const redStar = <Text style={s.red}> *</Text>;
+  const redStar = <Text style={styles.red}> *</Text>;
 
   useEffect(() => {
     setDefaultValues();
@@ -49,15 +49,15 @@ const Dish = props => {
     calcNutritionValue();
   }, [props.dishIngredients, mainInfo?.heatTreatment, mainInfo?.totalWeight])
 
-  const valueToString = useCallback((type, name) => {
+  const valueToString = (type, name) => {
     const value = type?.[name];
 
     if (value || value === 0) {
       return String(value)
     }
-  }, [])
+  }
 
-  const onEndEditingValue = useCallback((event, name, precision, state, setState) => {
+  const onEndEditingValue = (event, name, precision, state, setState) => {
     let value = parseFloat(event.nativeEvent.text);
 
     if (precision === 0)
@@ -75,18 +75,18 @@ const Dish = props => {
         ? setState(keys)
         : setState(null);
     }
-  }, [])
+  }
 
-  const goToNutrients = useCallback(() => {
+  const goToNutrients = () => {
     props.clearIngredients();
     props.setMealInfo({ button: 'addToIngredients' });
     props.navigation.push('Nutrients');
-  }, [])
+  }
 
-  const showIngredient = useCallback(ingredient => {
+  const showIngredient = ingredient => {
     setNutrientInfo({ ...ingredient, updateIngredient: true });
     setModalVisible(true);
-  }, [])
+  }
 
   const showDishInfo = () => {
     const ingredients = props.dishIngredients?.map(i => ({
@@ -106,15 +106,15 @@ const Dish = props => {
     setModalVisible(true);
   }
 
-  const removeIngredient = useCallback(infoKey => {
+  const removeIngredient = infoKey => {
     const ingredients = props.dishIngredients.filter(i => i.infoKey !== infoKey);
 
     ingredients.length === 0
       ? props.setDishIngredients(null, true)
       : props.setDishIngredients(ingredients, true)
-  }, [props.dishIngredients])
+  }
 
-  const addRecepieStep = useCallback(event => {
+  const addRecepieStep = event => {
     const text = event.nativeEvent.text.trim();
     if (text.length > 0) {
       setRecepie(recepie.concat({
@@ -123,9 +123,9 @@ const Dish = props => {
       }))
     }
     lastStepRef.current.setNativeProps({ text: '' });
-  }, [recepie])
+  }
 
-  const editRecepieStep = useCallback((event, stepNumber) => {
+  const editRecepieStep = (event, stepNumber) => {
     const text = event.nativeEvent.text.trim();
     let steps;
     if (text.length > 0) {
@@ -139,9 +139,9 @@ const Dish = props => {
 
     const numerated = steps.map((step, index) => ({ step: index + 1, description: step.description }))
     setRecepie(numerated)
-  }, [recepie])
+  }
 
-  const getType = useCallback(nutritionValue => {
+  const getType = nutritionValue => {
     const proteins = nutritionValue?.proteins || 0;
     const fats = nutritionValue?.fats || 0;
     const carbs = nutritionValue?.carbs || 0;
@@ -158,9 +158,9 @@ const Dish = props => {
       type.carb = true;
 
     return type;
-  }, [nutritionValue?.proteins, nutritionValue?.fats, nutritionValue?.carbs])
+  }
 
-  const calcIn100 = useCallback((object, totalWeight) => {
+  const calcIn100 = (object, totalWeight) => {
     if (!object) return;
     const newObject = {};
 
@@ -169,9 +169,9 @@ const Dish = props => {
     })
 
     return newObject;
-  }, [])
+  }
 
-  const calcWithTreatment = useCallback((object, loses) => {
+  const calcWithTreatment = (object, loses) => {
     if (!object) return;
 
     const newObject = {};
@@ -180,7 +180,7 @@ const Dish = props => {
       newObject[key] = parseFloat((object[key] * (loses[key] || 1)).toFixed(3));
     })
     return newObject;
-  }, [])
+  }
 
   const calcNutritionValue = () => {
     if (!props.dishIngredients?.length) {
@@ -250,7 +250,7 @@ const Dish = props => {
     })
   }
 
-  const setDefaultValues = useCallback(() => {
+  const setDefaultValues = () => {
     if (props.editInfo) {
       const { name, category, heatTreatment, totalWeight, prepareTime } = props.editInfo;
       const { imageUrl, recepie } = props.editInfo;
@@ -267,7 +267,7 @@ const Dish = props => {
       });
       setRecepie(recepie)
     }
-  }, [])
+  }
 
   const isNoChanges = () => {
     const { editInfo, dishIngredients } = props;
@@ -409,29 +409,29 @@ const Dish = props => {
 
   return (
     <>
-      <ScrollView contentContainerStyle={s.main}>
+      <ScrollView contentContainerStyle={styles.main}>
         <StatusBar
           barStyle='dark-content'
-          backgroundColor="white"
+          backgroundColor='white'
         />
-        <View style={s.header}>
+        <View style={styles.header}>
           <TouchableOpacity
-            style={s.backButton}
+            style={styles.backButton}
             activeOpacity={0.5}
             onPress={() => props.navigation.goBack()}
           >
             <Image
-              style={s.arrowIcon}
-              resizeMode="contain"
+              style={styles.arrowIcon}
+              resizeMode='contain'
               source={require('../../assets/img/common/left-arrow.png')}
             />
           </TouchableOpacity>
           {props.editInfo
-            ? <Text style={s.sectionText}>{strings.editDish}</Text>
+            ? <Text style={styles.sectionText}>{strings.editDish}</Text>
             : <Menu>
               <MenuTrigger customStyles={menuTriggerStyles}>
                 <Text style={triggerText}>{strings.createDish}</Text>
-                <IconFA style={arrowDown} name="angle-down" color="black" size={20} />
+                <IconFA style={arrowDown} name='angle-down' color='black' size={20} />
               </MenuTrigger>
               <MenuOptions customStyles={menuOptionsStyles}>
                 <MenuOption
@@ -446,14 +446,16 @@ const Dish = props => {
         </View>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={s.imageButton}
+          style={styles.imageButton}
           onPress={() => selectPhoto(strings.chooseDishPhoto, photo, setPhoto, props.editInfo?.imageUrl)}
         >
           {photo?.photoSource
-            ? <Image style={s.image} resizeMode="cover" source={photo.photoSource} />
+            ? <Image style={styles.image} resizeMode='cover' source={photo.photoSource} />
             : <>
               <IconFA name='camera' color='#c6cfdb' size={28} />
-              <Text style={s.fotoText}>{strings.choosePhoto}</Text>
+              <Text style={styles.fotoText}>
+                {strings.choosePhoto}
+              </Text>
             </>
           }
         </TouchableOpacity>
@@ -471,7 +473,7 @@ const Dish = props => {
           onPress={showDishInfo}
         />
         <ButtonsGroup
-          style={s.buttonsGroup}
+          style={styles.buttonsGroup}
           buttonHeight={30}
           selectedColor='#e6eaf0'
           selectedTextColor='#4f6488'
@@ -481,48 +483,58 @@ const Dish = props => {
         />
         {buttonsGroupIndex === 0 &&
           <View>
-            <Text style={s.inputTitle}>{strings.dishName}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.dishName}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.enterName}
               maxLength={50}
               defaultValue={mainInfo?.name}
               onEndEditing={event => setMainInfo({ ...mainInfo, name: upperCaseFirst(event.nativeEvent.text) })}
             />
-            <Text style={s.inputTitle}>{strings.category}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.category}{redStar}
+            </Text>
             <RNPickerSelect
               style={picker}
               useNativeAndroidPickerStyle={false}
-              Icon={() => <IconFA style={arrowDown} name="angle-down" color="#9da1a7" size={18} />}
+              Icon={() => <IconFA style={arrowDown} name='angle-down' color='#9da1a7' size={18} />}
               placeholder={{ label: strings.chooseCategoryPh, color: '#a9a9a9' }}
               items={dishCategories}
               value={mainInfo?.category}
               onValueChange={value => setMainInfo({ ...mainInfo, category: value?.toLowerCase() })}
             />
-            <Text style={s.inputTitle}>{strings.treatment}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.treatment}{redStar}
+            </Text>
             <RNPickerSelect
               style={picker}
               useNativeAndroidPickerStyle={false}
-              Icon={() => <IconFA style={arrowDown} name="angle-down" color="#9da1a7" size={18} />}
+              Icon={() => <IconFA style={arrowDown} name='angle-down' color='#9da1a7' size={18} />}
               placeholder={{ label: strings.notSelectedTreatment, color: '#a9a9a9' }}
               items={heatTreatmentTypes}
               value={mainInfo?.heatTreatment}
               onValueChange={value => setMainInfo({ ...mainInfo, heatTreatment: value })}
             />
-            <Text style={s.inputTitle}>{strings.totalWeight}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.totalWeight}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.totalWeightPh}
               keyboardType='number-pad'
               defaultValue={valueToString(mainInfo, 'totalWeight')}
               onEndEditing={event => onEndEditingValue(event, 'totalWeight', 0, mainInfo, setMainInfo)}
             />
-            <Text style={s.inputTitle}>{strings.prepareTime}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.prepareTime}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.prepareTimePh}
               keyboardType='number-pad'
               defaultValue={valueToString(mainInfo, 'prepareTime')}
@@ -534,20 +546,20 @@ const Dish = props => {
           <View>
             {props.dishIngredients?.map((ingredient, index) => {
               return (
-                <View style={s.ingredient} key={index}>
+                <View style={styles.ingredient} key={index}>
                   <TouchableOpacity
-                    style={s.ingredientTouchable}
+                    style={styles.ingredientTouchable}
                     onPress={() => showIngredient(ingredient)}
                   >
-                    <Text style={s.ingredientName}>{ingredient.name}
+                    <Text style={styles.ingredientName}>{ingredient.name}
                       {ingredient.calculated.heatTreatment && strings.heatTreatment2}
                     </Text>
-                    <Text style={s.ingredientWeight}>
+                    <Text style={styles.ingredientWeight}>
                       {strings.formatString(strings.gram, ingredient.calculated.weight)}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={s.remove}
+                    style={styles.remove}
                     onPress={() => removeIngredient(ingredient.infoKey)}
                   >
                     <IconFA name='remove' color='#c6cfdb' size={18} />
@@ -556,11 +568,11 @@ const Dish = props => {
               )
             })}
             <TouchableOpacity
-              style={s.addIngredient}
+              style={styles.addIngredient}
               onPress={goToNutrients}
             >
-              <IconFA name="plus" color="#4f6488" size={13} />
-              <Text style={s.addIngredientText}>{strings.addIngredient}</Text>
+              <IconFA name='plus' color='#4f6488' size={13} />
+              <Text style={styles.addIngredientText}>{strings.addIngredient}</Text>
             </TouchableOpacity>
           </View>
         }
@@ -569,14 +581,14 @@ const Dish = props => {
             {recepie?.map((rec, index) => {
               return (
                 <View key={index}>
-                  <Text style={s.stepTitle}>
+                  <Text style={styles.stepTitle}>
                     {strings.formatString(strings.stepFs, index + 1)}
                   </Text>
                   <TextInput
                     multiline
                     blurOnSubmit
                     disableFullscreenUI
-                    style={s.stepTextInput}
+                    style={styles.stepTextInput}
                     placeholder={strings.stepDescription}
                     maxLength={500}
                     defaultValue={rec.description}
@@ -586,7 +598,7 @@ const Dish = props => {
               )
             })}
             <View>
-              <Text style={s.stepTitle}>
+              <Text style={styles.stepTitle}>
                 {strings.formatString(strings.stepFs, recepie?.length + 1 || 1)}
               </Text>
               <TextInput
@@ -594,7 +606,7 @@ const Dish = props => {
                 multiline
                 blurOnSubmit
                 disableFullscreenUI
-                style={s.stepTextInput}
+                style={styles.stepTextInput}
                 placeholder={strings.stepDescription}
                 maxLength={500}
                 defaultValue=''
@@ -606,7 +618,7 @@ const Dish = props => {
       </ScrollView>
       <Button
         disabled={disabled}
-        style={s.save}
+        style={styles.save}
         title={strings.save}
         icon={disabled ? <ActivityIndicator color='white' /> : null}
         onPress={create}
@@ -617,7 +629,7 @@ const Dish = props => {
       >
         <StatusBar
           barStyle='light-content'
-          backgroundColor="black"
+          backgroundColor='black'
         />
         <Nutrient
           showDetails
@@ -646,7 +658,7 @@ export default connect(
   }
 )(Dish);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   main: {
     flexGrow: 1,
     backgroundColor: 'white',

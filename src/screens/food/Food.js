@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import { TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { mainLayout } from '../../styles/mainLayout';
@@ -36,7 +36,7 @@ const Food = props => {
     setTotalForDay();
   }, [props.meals, props.waters])
 
-  const updateIndex = useCallback(index => {
+  const updateIndex = index => {
     if (tabIndex !== index)
       setLoading(true);
 
@@ -46,9 +46,9 @@ const Food = props => {
         setLoading(false);
       }
     })
-  }, [tabIndex])
+  }
 
-  const pickerChangeDate = useCallback((e, dateArg) => {
+  const pickerChangeDate = (e, dateArg) => {
     setShowDatePicker(false);
 
     if (dateArg !== undefined) {
@@ -62,15 +62,15 @@ const Food = props => {
         requestAnimationFrame(() => setLoading(false));
       }
     }
-  }, [props.timestamp])
+  }
 
-  const arrowChangeDate = useCallback(timestamp => {
+  const arrowChangeDate = timestamp => {
     setLoading(true);
     props.changeDate(timestamp);
     requestAnimationFrame(() => setLoading(false));
-  }, [props.timestamp])
+  }
 
-  const onScroll = useCallback(event => {
+  const onScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const direction = currentOffset > 0 && currentOffset > flatListOffset.current
       ? 'down'
@@ -81,9 +81,9 @@ const Food = props => {
       setShowActionButton(buttonVisible);
 
     flatListOffset.current = currentOffset;
-  }, [flatListOffset.current])
+  }
 
-  const createMealKey = useCallback(meals => {
+  const createMealKey = meals => {
     if (!meals)
       return 1;
 
@@ -91,9 +91,9 @@ const Food = props => {
     return mealKeys.length
       ? Math.max(...mealKeys) + 1
       : 1;
-  }, [])
+  }
 
-  const navigateToNutrients = useCallback(() => {
+  const navigateToNutrients = () => {
     const { meals, waters, navigation, setMealInfo, shortDate, addWater } = props;
     const mealNumber = meals ? Object.keys(meals).length + 1 : 1;
     const waterNumber = waters ? Object.keys(waters).length + 1 : 1;
@@ -116,9 +116,9 @@ const Food = props => {
       addWater(shortDate, waterKey);
     }
 
-  }, [tabIndex, props.meals, props.waters])
+  }
 
-  const setTotalForDay = useCallback(() => {
+  const setTotalForDay = () => {
     const { meals, waters, setFoodDailyInfo } = props;
     const mealsArray = meals && Object.values(meals);
     const watersArray = waters && Object.values(waters);
@@ -242,28 +242,28 @@ const Food = props => {
       micronutrients: nutritionDetails?.micronutrients,
       waterInfo: waterInfo
     });
-  }, [props.meals, props.waters])
+  }
 
-  const renderEmpty = useCallback(() => {
+  const renderEmpty = () => {
     return !loading
       ? <Text style={mainLayout.empty}>
         {tabIndex === 0 ? strings.noMeals : strings.noWater}
       </Text>
       : null;
-  }, [loading])
+  }
 
-  const renderFooter = useCallback(() => {
+  const renderFooter = () => {
     return loading
-      ? <ActivityIndicator size="large" style={mainLayout.loading} />
+      ? <ActivityIndicator size='large' style={mainLayout.loading} />
       : null;
-  }, [loading])
+  }
 
   const renderHeader = useMemo(() => {
     const { timestamp, longDate, navigation, foodDailyInfo } = props;
     const defaultValue = (0).toFixed(1);
-    const circle = <Circle cx={30} cy={30} r="22" fill="white" />;
-    const tintColor = "#2566d4";
-    const backgroundColor = "rgba(255, 255, 255, 0.5)";
+    const circle = <Circle cx={30} cy={30} r='22' fill='white' />;
+    const tintColor = '#2566d4';
+    const backgroundColor = 'rgba(255, 255, 255, 0.5)';
 
     const notAcceptedFood = Object.values(props.meals ?? [])
       .filter(m => m.accepted).length === 0;
@@ -304,8 +304,8 @@ const Food = props => {
               <View style={mainLayout.qualityContainer}>
                 <Image
                   source={require('../../assets/img/food/proteins-quality-icon.png')}
-                  resizeMode="contain"
-                  style={s.proteinsQuality}
+                  resizeMode='contain'
+                  style={styles.proteinsQuality}
                 />
                 <Text style={mainLayout.qualityText}>
                   {foodDailyInfo?.proteinsQuality?.toFixed(1) || '-'}
@@ -335,8 +335,8 @@ const Food = props => {
               <View style={mainLayout.qualityContainer}>
                 <Image
                   source={require('../../assets/img/food/fats-quality-icon.png')}
-                  resizeMode="contain"
-                  style={s.fatsQuality}
+                  resizeMode='contain'
+                  style={styles.fatsQuality}
                 />
                 <Text style={mainLayout.qualityText}>
                   {foodDailyInfo?.fatsQuality?.toFixed(1) || '-'}
@@ -366,8 +366,8 @@ const Food = props => {
               <View style={mainLayout.qualityContainer}>
                 <Image
                   source={require('../../assets/img/food/carbs-quality-icon.png')}
-                  resizeMode="contain"
-                  style={s.carbsQuality}
+                  resizeMode='contain'
+                  style={styles.carbsQuality}
                 />
                 <Text style={mainLayout.qualityText}>
                   {foodDailyInfo?.carbsQuality?.toFixed(1) || '-'}
@@ -397,8 +397,8 @@ const Food = props => {
               <View style={mainLayout.qualityContainer}>
                 <Image
                   source={require('../../assets/img/food/vitamins-quality-icon.png')}
-                  resizeMode="contain"
-                  style={s.vitaminsQuality}
+                  resizeMode='contain'
+                  style={styles.vitaminsQuality}
                 />
                 <Text style={mainLayout.qualityText}>
                   {foodDailyInfo?.microIndex?.toFixed(1) || '-'}
@@ -428,8 +428,8 @@ const Food = props => {
               <View style={mainLayout.qualityContainer}>
                 <Image
                   source={require('../../assets/img/food/water-quality-icon.png')}
-                  resizeMode="contain"
-                  style={s.waterQuality}
+                  resizeMode='contain'
+                  style={styles.waterQuality}
                 />
                 <Text style={mainLayout.qualityText}>
                   {foodDailyInfo?.waterIndex?.toFixed(0) || '-'}
@@ -441,7 +441,7 @@ const Food = props => {
             <TouchableOpacity style={mainLayout.arrow}
               onPress={() => arrowChangeDate(timestamp - 86400000)}
             >
-              <Icon name="chevron-left" color="#9a8e81" size={20} />
+              <Icon name='chevron-left' color='#9a8e81' size={20} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
               <Text style={mainLayout.dateFont}>{longDate}</Text>
@@ -449,7 +449,7 @@ const Food = props => {
             <TouchableOpacity style={mainLayout.arrow}
               onPress={() => arrowChangeDate(timestamp + 86400000)}
             >
-              <Icon name="chevron-right" color="#9a8e81" size={20} />
+              <Icon name='chevron-right' color='#9a8e81' size={20} />
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -459,13 +459,13 @@ const Food = props => {
           onPress={updateIndex}
           buttons={[strings.food, strings.water]}
           selectedIndex={tabIndex}
-          style={s.buttonsGroup}
+          style={styles.buttonsGroup}
         />
       </View>
     );
   }, [loading, props.foodDailyInfo])
 
-  const renderMeals = useCallback(({ item, index }) => {
+  const renderMeals = ({ item, index }) => {
     if (loading) return;
     const mealNumber = index + 1;
 
@@ -492,19 +492,19 @@ const Food = props => {
         />
       )
     }
-  }, [loading])
+  }
 
   return (
     <View style={mainLayout.main}>
       <FocusAwareStatusBar
-        backgroundColor="black"
-        barStyle="light-content" />
+        backgroundColor='black'
+        barStyle='light-content' />
       <FlatList
         data={tabIndex === 0
           ? sortByTime(props.meals)
           : sortByTime(props.waters)
         }
-        overScrollMode="never"
+        overScrollMode='never'
         ListEmptyComponent={renderEmpty}
         ListHeaderComponent={renderHeader}
         ListFooterComponent={renderFooter}
@@ -517,7 +517,7 @@ const Food = props => {
           disabled={loading}
           style={mainLayout.addButton}
           activeOpacity={0.9}
-          icon={<Icon name="plus" color="white" size={16} />}
+          icon={<Icon name='plus' color='white' size={16} />}
           onPress={navigateToNutrients}
         />
       }
@@ -525,7 +525,7 @@ const Food = props => {
         <DateTimePicker
           value={props.timestamp}
           mode='date'
-          display="spinner"
+          display='spinner'
           onChange={pickerChangeDate}
         />
       }
@@ -587,7 +587,7 @@ export default compose(
   ]),
 )(Food);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   buttonsGroup: {
     margin: 10
   },

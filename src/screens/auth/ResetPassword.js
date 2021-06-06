@@ -14,54 +14,63 @@ const ResetPassword = props => {
 
   const sendToMail = () => {
     const emailExist = email.trim().length;
+
     if (emailExist) {
       props.setLoading();
       props.sendResetMail(email, props.navigation);
     }
   }
 
-  // console.log('->', newUser)
-
   return (
-    <ScrollView contentContainerStyle={s.main}>
-      <View style={s.header}>
+    <ScrollView contentContainerStyle={styles.main}>
+      <View style={styles.header}>
         <TouchableOpacity
-          style={s.backButton}
+          style={styles.backButton}
           activeOpacity={0.5}
           onPress={() => props.navigation.goBack()}
         >
           <Image
-            style={s.arrowIcon}
-            resizeMode="contain"
+            style={styles.arrowIcon}
+            resizeMode='contain'
             source={require('../../assets/img/common/left-arrow.png')}
           />
         </TouchableOpacity>
-        <Text style={s.title}>{strings.recoverPassword}</Text>
+        <Text style={styles.title}>
+          {strings.recoverPassword}
+        </Text>
       </View>
-      <View style={s.fieldsBox}>
-        <Text style={s.inputTitle}>{strings.emailTitle}<Text style={s.red}>*</Text></Text>
+      <View style={styles.fieldsBox}>
+        <Text style={styles.inputTitle}>
+          {strings.emailTitle} <Text style={styles.red}>*</Text>
+        </Text>
         <TextInput
           disableFullscreenUI
-          style={s.textInput}
+          style={styles.textInput}
           maxLength={40}
           placeholder={strings.registerEmailPh}
           returnKeyType='next'
           value={email}
           onChangeText={(text) => setEmail(text.replace(/\s/g, ''))}
         />
-
       </View>
-      <Text style={s.remind}>{strings.needCheckMail}</Text>
+      <Text style={styles.remind}>
+        {strings.needCheckMail}
+      </Text>
       {props.resetWarn &&
-        <Text style={s.warn}>{props.resetWarn.slice(props.resetWarn.indexOf(' '))}</Text>
+        <Text style={styles.warn}>
+          {props.resetWarn.slice(props.resetWarn.indexOf(' '))}
+        </Text>
       }
-      <View style={s.registerWrapper}>
+      <View style={styles.registerWrapper}>
         <Button
           disabled={props.isLoading}
-          style={s.button}
+          style={styles.button}
           title={strings.sendInstructions}
           activeOpacity={0.9}
-          icon={props.isLoading ? <ActivityIndicator color='white' /> : null}
+          icon={props.isLoading
+            ? <ActivityIndicator color='white' />
+            : null
+          }
           onPress={() => sendToMail()}
         />
       </View>
@@ -81,7 +90,7 @@ export default connect(
   }
 )(ResetPassword);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   main: {
     flexGrow: 1,
     backgroundColor: 'white',

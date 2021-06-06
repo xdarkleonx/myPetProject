@@ -1,1 +1,1 @@
-This is some part of my pet project to introduce my code skills. App not tested, possibly bugs.
+This is some part of my pet project.

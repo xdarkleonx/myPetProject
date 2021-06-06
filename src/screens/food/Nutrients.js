@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, StatusBar, FlatList, StyleSheet, Text, Image, ActivityIndicator } from 'react-native';
 import { SearchHeader } from '../../components/SearchHeader';
 import Nutrient from '../../components/Nutrient';
@@ -24,13 +24,13 @@ const Nutrients = props => {
     }
   }, [])
 
-  const clearList = useCallback(() => {
+  const clearList = () => {
     props.mealInfo.button === 'addToMeal'
       ? props.clearNutrients()
       : props.clearIngredients()
-  }, [props.mealInfo.button])
+  }
 
-  const getFilters = useCallback(without => {
+  const getFilters = without => {
     const { mealInfo, nutrientsFilter, ingredientsFilter } = props;
 
     const filters = mealInfo.button === 'addToMeal'
@@ -43,17 +43,17 @@ const Nutrients = props => {
     }
 
     return filters;
-  }, [props?.nutrientsFilter, props?.ingredientsFilter])
+  }
 
-  const setFilters = useCallback((filters, isOverwrite) => {
+  const setFilters = (filters, isOverwrite) => {
     const { mealInfo, setNutrientsFilter, setIngredientsFilter } = props;
 
     mealInfo.button === 'addToMeal'
       ? setNutrientsFilter(filters, isOverwrite)
       : setIngredientsFilter(filters, isOverwrite)
-  }, [props.nutrientsFilter, props.ingredientsFilter])
+  }
 
-  const setNameFilter = useCallback(text => {
+  const setNameFilter = text => {
     const { getNutrients } = props;
 
     if (!text) return;
@@ -71,9 +71,9 @@ const Nutrients = props => {
       getNutrients(filters, 'first');
       setSearchText(null);
     }
-  }, [props.nutrientsFilter, props.ingredientsFilter])
+  }
 
-  const clearNameFilter = useCallback(() => {
+  const clearNameFilter = () => {
     const filters = getFilters('name');
     setFilters(filters, true);
     setSearchText(null);
@@ -87,9 +87,9 @@ const Nutrients = props => {
     else if (sectionIndex === 1) {
       props.getNutrients(filters, 'first');
     }
-  }, [props.nutrientsFilter, props.ingredientsFilter])
+  }
 
-  const clearOtherFilter = useCallback(() => {
+  const clearOtherFilter = () => {
     const { getNutrients } = props;
     const filters = getFilters();
 
@@ -102,9 +102,9 @@ const Nutrients = props => {
       setFilters(null, true);
       clearList();
     }
-  }, [props.nutrientsFilter, props.ingredientsFilter])
+  }
 
-  const changeSectionFilter = useCallback(index => {
+  const changeSectionFilter = index => {
     const { getNutrients, clearNutrients, clearIngredients } = props;
     const { authId, nutrients, ingredients, mealInfo } = props;
 
@@ -128,16 +128,16 @@ const Nutrients = props => {
       setFilters({ ...filters, owner: authId });
       getNutrients({ ...filters, owner: authId }, 'first');
     }
-  }, [props.nutrientsFilter, props.ingredientsFilter])
+  }
 
-  const getItemLayout = useCallback((_, index) => {
+  const getItemLayout = (_, index) => {
     return ({
       length: 218.6666717529297,
       offset: 218.6666717529297 * index, index
     })
-  }, [])
+  }
 
-  const getMoreNutrients = useCallback(() => {
+  const getMoreNutrients = () => {
     const { lastNutrient, lastIngredient, mealInfo } = props;
     const filters = getFilters();
     const last = mealInfo.button === 'addToMeal'
@@ -145,19 +145,25 @@ const Nutrients = props => {
       : lastIngredient;
 
     props.getNutrients(filters, last);
-  }, [props.nutrients, props.mealInfo, props.lastNutrient, props.lastIngredient])
+  }
 
-  const renderTags = useCallback(() => {
+  const renderTags = () => {
     let key = 0;
     let tags = [];
     const filters = getFilters();
 
     switch (filters?.species) {
       case 'product':
-        tags.push(<Text key={key} style={s.tagText}>{strings.products}</Text>)
+        tags.push(
+          <Text key={key} style={styles.tagText}>
+            {strings.products}
+          </Text>)
         break;
       case 'dish':
-        tags.push(<Text key={key} style={s.tagText}>{strings.dishes}</Text>)
+        tags.push(
+          <Text key={key} style={styles.tagText}>
+            {strings.dishes}
+          </Text>)
         break;
       default:
         break;
@@ -165,13 +171,24 @@ const Nutrients = props => {
 
     switch (filters?.type) {
       case 'protein':
-        tags.push(<Text key={++key} style={s.tagText}>{strings.proteinType}</Text>)
+        tags.push(
+          <Text key={++key} style={styles.tagText}>
+            {strings.proteinType}
+          </Text>)
         break;
       case 'fat':
-        tags.push(<Text key={++key} style={s.tagText}>{strings.fatType}</Text>)
+        tags.push(
+          <Text key={++key} style={styles.tagText}>
+            {strings.fatType}
+          </Text>
+        )
         break;
       case 'carb':
-        tags.push(<Text key={++key} style={s.tagText}>{strings.carbType}</Text>)
+        tags.push(
+          <Text key={++key} style={styles.tagText}>
+            {strings.carbType}
+          </Text>
+        )
         break;
       default:
         break;
@@ -179,7 +196,7 @@ const Nutrients = props => {
 
     filters?.vitamins?.map(vit => {
       tags.push(
-        <Text key={++key} style={s.tagText}>
+        <Text key={++key} style={styles.tagText}>
           {strings.formatString(strings.vitTagFs, vit)}
         </Text>
       )
@@ -187,7 +204,7 @@ const Nutrients = props => {
 
     filters?.minerals?.map(min => {
       tags.push(
-        <Text key={++key} style={s.tagText}>
+        <Text key={++key} style={styles.tagText}>
           {strings.formatString(strings.minTagFs, min)}
         </Text>
       )
@@ -197,7 +214,7 @@ const Nutrients = props => {
       tags.push(
         <Button
           key={++key}
-          style={s.button}
+          style={styles.button}
           title={strings.resetLower}
           onPress={clearOtherFilter}
         />
@@ -205,38 +222,38 @@ const Nutrients = props => {
     }
 
     return tags;
-  }, [props.nutrientsFilter, props.ingredientsFilter])
+  }
 
-  const renderEmpty = useCallback(() => {
+  const renderEmpty = () => {
     const hasFilters = Object.keys(getFilters() ?? []).length > 0;
     if (props.loading) return null;
 
     return hasFilters
-      ? <Text style={s.empty}>{strings.noQueryResults}</Text>
-      : <Text style={s.tip}>
+      ? <Text style={styles.empty}>{strings.noQueryResults}</Text>
+      : <Text style={styles.tip}>
         {strings.enterNutrientName}
         {strings.useFilter}
-        <IconFA name="filter" size={16} color='#a8b4c4' />.{'\n'}
+        <IconFA name='filter' size={16} color='#a8b4c4' />.{'\n'}
         {strings.createNutrient}
-        <Image style={s.addNutrientIcon} resizeMode="contain"
+        <Image style={styles.addNutrientIcon} resizeMode='contain'
           source={require('../../assets/img/food/add-nutrient.png')} />.
         </Text>
 
-  }, [props.loading, props?.nutrientsFilter, props?.ingredientsFilter])
+  }
 
-  const renderFooter = useCallback(() => {
+  const renderFooter = () => {
     return props.loading
       ? <ActivityIndicator size='large' />
       : null
-  }, [props.loading])
+  }
 
   const renderHeader = useMemo(() => {
     const { button } = props.mealInfo;
     const { navigate } = props.navigation;
 
     const createIcon = <Image
-      style={s.addIcon}
-      resizeMode="contain"
+      style={styles.addIcon}
+      resizeMode='contain'
       source={require('../../assets/img/food/add-nutrient.png')}
     />
 
@@ -252,29 +269,29 @@ const Nutrients = props => {
           onSubmitEditing={setNameFilter}
           onOpenFilter={() => navigate('NutrientsFilter')}
         />
-        <View style={s.tagBox}>
+        <View style={styles.tagBox}>
           {renderTags()}
         </View>
       </View>
     )
   }, [searchText, renderTags])
 
-  const renderNutrients = useCallback(({ item }) => {
+  const renderNutrients = ({ item }) => {
     const { mealInfo, nutrientsFilter } = props;
     const isShowMenu = mealInfo.button === 'addToMeal' && nutrientsFilter?.owner;
     return (
       <Nutrient
         showMenu={isShowMenu}
         addButton={mealInfo.button}
-        style={s.nutrient}
+        style={styles.nutrient}
         infoKey={item.infoKey}
         data={{ ...item }}
       />
     )
-  }, [props.nutrients, props.ingredients])
+  }
 
   return (
-    <View style={s.main}>
+    <View style={styles.main}>
       <StatusBar
         barStyle='dark-content'
         backgroundColor='white'
@@ -321,7 +338,7 @@ export default compose(
   ),
 )(Nutrients);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: '#f7f7f7'

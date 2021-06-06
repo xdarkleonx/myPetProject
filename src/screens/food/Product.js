@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
 import { Image, ScrollView, TextInput, ActivityIndicator } from 'react-native';
 import { Button } from '../../components/Button';
@@ -30,14 +30,15 @@ const Product = props => {
   const [aminoAcids, setAminoAcids] = useState();
   const [fattyAcids, setFattyAcids] = useState();
   const [saccharides, setSaccharides] = useState();
-  const redStar = <Text style={s.red}> *</Text>;
+
+  const redStar = <Text style={styles.red}> *</Text>;
 
   useEffect(() => {
     setDefaultValues();
     return () => props.setEditInfo(null);
   }, [])
 
-  const onEndEditingValue = useCallback((event, name, precision, state, setState) => {
+  const onEndEditingValue = (event, name, precision, state, setState) => {
     let value = parseFloat(event.nativeEvent.text);
 
     if (precision === 0)
@@ -55,15 +56,15 @@ const Product = props => {
         ? setState(keys)
         : setState(null);
     }
-  }, [])
+  }
 
-  const valueToString = useCallback((type, name) => {
+  const valueToString = (type, name) => {
     const value = type?.[name];
     if (value || value === 0)
       return String(value);
-  }, [])
+  }
 
-  const getType = useCallback(() => {
+  const getType = () => {
     const proteins = mainInfo?.proteins || 0;
     const fats = mainInfo?.fats || 0;
     const carbs = mainInfo?.carbs || 0;
@@ -80,9 +81,9 @@ const Product = props => {
       type.carb = true;
 
     return type;
-  }, [mainInfo?.proteins, mainInfo?.fats, mainInfo?.carbs])
+  }
 
-  const setDefaultValues = useCallback(() => {
+  const setDefaultValues = () => {
     if (props.editInfo) {
       const { editInfo } = props;
       const { imageUrl, micronutrients, aminoacids, fattyacids, saccharides } = props.editInfo;
@@ -160,7 +161,7 @@ const Product = props => {
         ...(saccharides.fibers) && { fibers: saccharides.fibers },
       })
     }
-  }, [])
+  }
 
   const isNoChanges = () => {
     const { editInfo } = props;
@@ -297,29 +298,31 @@ const Product = props => {
 
   return (
     <>
-      <ScrollView contentContainerStyle={s.main}>
+      <ScrollView contentContainerStyle={styles.main}>
         <StatusBar
           barStyle='dark-content'
           backgroundColor='white'
         />
-        <View style={s.header}>
+        <View style={styles.header}>
           <TouchableOpacity
-            style={s.backButton}
+            style={styles.backButton}
             activeOpacity={0.5}
             onPress={() => props.navigation.goBack()}
           >
             <Image
-              style={s.arrowIcon}
-              resizeMode="contain"
+              style={styles.arrowIcon}
+              resizeMode='contain'
               source={require('../../assets/img/common/left-arrow.png')}
             />
           </TouchableOpacity>
           {props.editInfo
-            ? <Text style={s.sectionText}>{strings.editProduct}</Text>
+            ? <Text style={styles.sectionText}>
+              {strings.editProduct}
+            </Text>
             : <Menu>
               <MenuTrigger customStyles={menuTriggerStyles}>
                 <Text style={triggerText}>{strings.createProduct}</Text>
-                <IconFA style={arrowDown} name="angle-down" color="black" size={20} />
+                <IconFA style={arrowDown} name='angle-down' color='black' size={20} />
               </MenuTrigger>
               <MenuOptions customStyles={menuOptionsStyles}>
                 <MenuOption
@@ -332,88 +335,111 @@ const Product = props => {
         </View>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={s.imageButton}
+          style={styles.imageButton}
           onPress={() => selectPhoto(strings.chooseProductPhoto, photo, setPhoto, props.editInfo?.imageUrl)}
         >
           {photo?.photoSource
-            ? <Image style={s.image} resizeMode="cover" source={photo.photoSource} />
+            ? <Image style={styles.image} resizeMode='cover' source={photo.photoSource} />
             : <>
               <IconFA name='camera' color='#c6cfdb' size={28} />
-              <Text style={s.fotoText}>{strings.choosePhoto}</Text>
+              <Text style={styles.fotoText}>
+                {strings.choosePhoto}
+              </Text>
             </>
           }
         </TouchableOpacity>
         <ButtonsGroup
-          style={s.buttonsGroup}
+          buttons={[
+            strings.mainTab,
+            strings.vitamins,
+            strings.minerals,
+            strings.aminoShort,
+            strings.fattyShort,
+            strings.sacchShort
+          ]}
+          style={styles.buttonsGroup}
           buttonHeight={30}
           rows={2}
           selectedColor='#e6eaf0'
           selectedTextColor='#4f6488'
           selectedIndex={buttonsGroupIndex}
-          buttons={[strings.mainTab, strings.vitamins, strings.minerals, strings.aminoShort, strings.fattyShort, strings.sacchShort]}
           onPress={(index) => setButtonsGroupIndex(index)}
         />
         {buttonsGroupIndex === 0 &&
           <View>
-            <Text style={s.inputTitle}>{strings.productName}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.productName}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.enterName}
               maxLength={50}
               defaultValue={mainInfo?.name}
               onEndEditing={(event) => setMainInfo({ ...mainInfo, name: upperCaseFirst(event.nativeEvent.text) })}
             />
-            <Text style={s.inputTitle}>{strings.category}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.category}{redStar}
+            </Text>
             <RNPickerSelect
               style={picker}
               useNativeAndroidPickerStyle={false}
-              Icon={() => <IconFA style={arrowDown} name="angle-down" color="#9da1a7" size={18} />}
+              Icon={() => <IconFA style={arrowDown} name='angle-down' color='#9da1a7' size={18} />}
               placeholder={{ label: strings.chooseCategoryPh, color: '#a9a9a9' }}
               items={productCategories}
               value={mainInfo?.category}
               onValueChange={(value) => setMainInfo({ ...mainInfo, category: value?.toLowerCase() })}
             />
-            <Text style={s.inputTitle}>{strings.proteins}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.proteins}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.proteinsIn100}
               keyboardType='number-pad'
               defaultValue={valueToString(mainInfo, 'proteins')}
               onEndEditing={(event) => onEndEditingValue(event, 'proteins', 1, mainInfo, setMainInfo)}
             />
-            <Text style={s.inputTitle}>{strings.fats}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.fats}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.fatsIn100}
               keyboardType='number-pad'
               defaultValue={valueToString(mainInfo, 'fats')}
               onEndEditing={(event) => onEndEditingValue(event, 'fats', 1, mainInfo, setMainInfo)}
             />
-            <Text style={s.inputTitle}>{strings.carbs}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.carbs}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.carbsIn100}
               keyboardType='number-pad'
               defaultValue={valueToString(mainInfo, 'carbs')}
               onEndEditing={(event) => onEndEditingValue(event, 'carbs', 1, mainInfo, setMainInfo)}
             />
-            <Text style={s.inputTitle}>{strings.calories}{redStar}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.calories}{redStar}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.caloriesIn100}
               keyboardType='number-pad'
               defaultValue={valueToString(mainInfo, 'calories')}
               onEndEditing={(event) => onEndEditingValue(event, 'calories', 0, mainInfo, setMainInfo)}
             />
-            <Text style={s.inputTitle}>{strings.water}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.water}
+            </Text>
             <TextInput
               disableFullscreenUI
-              style={s.textInput}
+              style={styles.textInput}
               placeholder={strings.waterIn100}
               keyboardType='number-pad'
               defaultValue={valueToString(mainInfo, 'water')}
@@ -423,9 +449,11 @@ const Product = props => {
         }
         {buttonsGroupIndex === 1 &&
           <View>
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'C')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'C')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitC)}
@@ -433,9 +461,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_c')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_c', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'B1')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'B1')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitB1)}
@@ -443,9 +473,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_b1')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_b1', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'B2')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'B2')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitB2)}
@@ -453,9 +485,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_b2')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_b2', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'B4')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'B4')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitB4)}
@@ -463,9 +497,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_b4')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_b4', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'B5')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'B5')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitB5)}
@@ -473,9 +509,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_b5')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_b5', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'B6')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'B6')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitB6)}
@@ -483,9 +521,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_b6')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_b6', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'B9')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'B9')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.vitB9)}
@@ -493,9 +533,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_b9')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_b9', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'B12')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'B12')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.vitB12)}
@@ -503,9 +545,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_b12')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_b12', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'PP')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'PP')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitPP)}
@@ -513,9 +557,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_pp')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_pp', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'H')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'H')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.vitH)}
@@ -523,9 +569,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_h')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_h', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'A')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'A')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.vitA)}
@@ -533,9 +581,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_a')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_a', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.betaCarotene}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.betaCarotene}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.betaCarotene)}
@@ -543,9 +593,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'beta_carotene')}
               onEndEditing={(event) => onEndEditingValue(event, 'beta_carotene', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'E')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'E')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.vitE)}
@@ -553,9 +605,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_e')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_e', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'D')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'D')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.vitD)}
@@ -563,9 +617,11 @@ const Product = props => {
               defaultValue={valueToString(vitamins, 'vit_d')}
               onEndEditing={(event) => onEndEditingValue(event, 'vit_d', null, vitamins, setVitamins)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.vitaminFs, 'K')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.vitaminFs, 'K')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.vitK)}
@@ -577,9 +633,11 @@ const Product = props => {
         }
         {buttonsGroupIndex === 2 &&
           <View>
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Ca')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Ca')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minCa)}
@@ -587,9 +645,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_ca')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_ca', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'P')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'P')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minP)}
@@ -597,9 +657,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_p')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_p', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Mg')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Mg')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minMg)}
@@ -607,9 +669,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_mg')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_mg', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'K')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'K')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minK)}
@@ -617,9 +681,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_k')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_k', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Na')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Na')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minNa)}
@@ -627,9 +693,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_na')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_na', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Cl')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Cl')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minCl)}
@@ -637,9 +705,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_cl')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_cl', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Fe')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Fe')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minFe)}
@@ -647,9 +717,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_fe')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_fe', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Zn')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Zn')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minZn)}
@@ -657,9 +729,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_zn')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_zn', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'I')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'I')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.minI)}
@@ -667,9 +741,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_i')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_i', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Cu')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Cu')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minCu)}
@@ -677,9 +753,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_cu')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_cu', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Mn')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Mn')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minMn)}
@@ -687,9 +765,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_mn')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_mn', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Se')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Se')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.minSe)}
@@ -697,9 +777,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_se')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_se', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Cr')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Cr')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.minCr)}
@@ -707,9 +789,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_cr')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_cr', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'Mo')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'Mo')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mcgCommaFs, strings.minMo)}
@@ -717,9 +801,11 @@ const Product = props => {
               defaultValue={valueToString(minerals, 'min_mo')}
               onEndEditing={(event) => onEndEditingValue(event, 'min_mo', null, minerals, setMinerals)}
             />
-            <Text style={s.inputTitle}>{strings.formatString(strings.mineralFs, 'F')}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.formatString(strings.mineralFs, 'F')}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.minF)}
@@ -731,9 +817,11 @@ const Product = props => {
         }
         {buttonsGroupIndex === 3 &&
           <View>
-            <Text style={s.inputTitle}>{strings.isoleucine}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.isoleucine}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.isoleucine)}
@@ -741,9 +829,11 @@ const Product = props => {
               defaultValue={valueToString(aminoAcids, 'isoleucine')}
               onEndEditing={(event) => onEndEditingValue(event, 'isoleucine', null, aminoAcids, setAminoAcids)}
             />
-            <Text style={s.inputTitle}>{strings.leucine}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.leucine}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.leucine)}
@@ -751,9 +841,11 @@ const Product = props => {
               defaultValue={valueToString(aminoAcids, 'leucine')}
               onEndEditing={(event) => onEndEditingValue(event, 'leucine', null, aminoAcids, setAminoAcids)}
             />
-            <Text style={s.inputTitle}>{strings.valine}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.valine}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.valine)}
@@ -761,9 +853,11 @@ const Product = props => {
               defaultValue={valueToString(aminoAcids, 'valine')}
               onEndEditing={(event) => onEndEditingValue(event, 'valine', null, aminoAcids, setAminoAcids)}
             />
-            <Text style={s.inputTitle}>{strings.lysine}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.lysine}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.lysine)}
@@ -771,9 +865,11 @@ const Product = props => {
               defaultValue={valueToString(aminoAcids, 'lysine')}
               onEndEditing={(event) => onEndEditingValue(event, 'lysine', null, aminoAcids, setAminoAcids)}
             />
-            <Text style={s.inputTitle}>{strings.methionine}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.methionine}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.methionine)}
@@ -781,9 +877,11 @@ const Product = props => {
               defaultValue={valueToString(aminoAcids, 'methionine')}
               onEndEditing={(event) => onEndEditingValue(event, 'methionine', null, aminoAcids, setAminoAcids)}
             />
-            <Text style={s.inputTitle}>{strings.phenylalanine}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.phenylalanine}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.phenylalanine)}
@@ -791,9 +889,11 @@ const Product = props => {
               defaultValue={valueToString(aminoAcids, 'phenylalanine')}
               onEndEditing={(event) => onEndEditingValue(event, 'phenylalanine', null, aminoAcids, setAminoAcids)}
             />
-            <Text style={s.inputTitle}>{strings.tryptophan}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.tryptophan}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.tryptophan)}
@@ -801,9 +901,11 @@ const Product = props => {
               defaultValue={valueToString(aminoAcids, 'tryptophan')}
               onEndEditing={(event) => onEndEditingValue(event, 'tryptophan', null, aminoAcids, setAminoAcids)}
             />
-            <Text style={s.inputTitle}>{strings.threonine}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.threonine}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.threonine)}
@@ -815,9 +917,11 @@ const Product = props => {
         }
         {buttonsGroupIndex === 4 &&
           <View>
-            <Text style={s.inputTitle}>{strings.saturated}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.saturated}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.saturated)}
@@ -825,9 +929,11 @@ const Product = props => {
               defaultValue={valueToString(fattyAcids, 'saturated')}
               onEndEditing={(event) => onEndEditingValue(event, 'saturated', null, fattyAcids, setFattyAcids)}
             />
-            <Text style={s.inputTitle}>{strings.monounsaturated}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.monounsaturated}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.monounsaturated)}
@@ -835,9 +941,11 @@ const Product = props => {
               defaultValue={valueToString(fattyAcids, 'monounsaturated')}
               onEndEditing={(event) => onEndEditingValue(event, 'monounsaturated', null, fattyAcids, setFattyAcids)}
             />
-            <Text style={s.inputTitle}>{strings.polyunsaturated}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.polyunsaturated}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.polyunsaturated)}
@@ -845,9 +953,11 @@ const Product = props => {
               defaultValue={valueToString(fattyAcids, 'polyunsaturated')}
               onEndEditing={(event) => onEndEditingValue(event, 'polyunsaturated', null, fattyAcids, setFattyAcids)}
             />
-            <Text style={s.inputTitle}>{strings.omega3}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.omega3}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.omega3)}
@@ -855,9 +965,11 @@ const Product = props => {
               defaultValue={valueToString(fattyAcids, 'omega3')}
               onEndEditing={(event) => onEndEditingValue(event, 'omega3', null, fattyAcids, setFattyAcids)}
             />
-            <Text style={s.inputTitle}>{strings.omega6}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.omega6}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.omega6)}
@@ -865,9 +977,11 @@ const Product = props => {
               defaultValue={valueToString(fattyAcids, 'omega6')}
               onEndEditing={(event) => onEndEditingValue(event, 'omega6', null, fattyAcids, setFattyAcids)}
             />
-            <Text style={s.inputTitle}>{strings.transfats}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.transfats}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.transfats)}
@@ -875,9 +989,11 @@ const Product = props => {
               defaultValue={valueToString(fattyAcids, 'transfats')}
               onEndEditing={(event) => onEndEditingValue(event, 'transfats', null, fattyAcids, setFattyAcids)}
             />
-            <Text style={s.inputTitle}>{strings.cholesterol}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.cholesterol}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.mgCommaFs, strings.cholesterol)}
@@ -889,9 +1005,11 @@ const Product = props => {
         }
         {buttonsGroupIndex === 5 &&
           <View>
-            <Text style={s.inputTitle}>{strings.monosaccharides}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.monosaccharides}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.monosaccharides)}
@@ -899,9 +1017,11 @@ const Product = props => {
               defaultValue={valueToString(saccharides, 'monosaccharides')}
               onEndEditing={(event) => onEndEditingValue(event, 'monosaccharides', null, saccharides, setSaccharides)}
             />
-            <Text style={s.inputTitle}>{strings.polysaccharides}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.polysaccharides}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.polysaccharides)}
@@ -909,9 +1029,11 @@ const Product = props => {
               defaultValue={valueToString(saccharides, 'polysaccharides')}
               onEndEditing={(event) => onEndEditingValue(event, 'polysaccharides', null, saccharides, setSaccharides)}
             />
-            <Text style={s.inputTitle}>{strings.fibers}</Text>
+            <Text style={styles.inputTitle}>
+              {strings.fibers}
+            </Text>
             <TextInput
-              style={s.textInput}
+              style={styles.textInput}
               disableFullscreenUI
               maxLength={6}
               placeholder={strings.formatString(strings.gramCommaFs, strings.fibers)}
@@ -924,7 +1046,7 @@ const Product = props => {
       </ScrollView>
       <Button
         disabled={disabled}
-        style={s.save}
+        style={styles.save}
         title={strings.save}
         icon={disabled ? <ActivityIndicator color='white' /> : null}
         onPress={create}
@@ -944,9 +1066,8 @@ export default connect(
   }
 )(Product);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   main: {
-    // flexGrow: 1,
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingTop: 15,

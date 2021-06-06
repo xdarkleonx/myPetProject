@@ -25,24 +25,25 @@ const Register = props => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const phoneRef = useRef();
-  const redStar = <Text style={s.red}> *</Text>;
-  const arrowDown = <Icon style={s.arrowDown} name="angle-down" color="#9da1a7" size={18} />;
 
-  const newUser = {
-    birthday: Date.parse(new Date(birthYear, birthMonth, birthDay)) || '',
-    firstName,
-    lastName,
-    email,
-    password,
-    phoneNumber,
-    gender
-  }
+  const redStar = <Text style={styles.red}> *</Text>;
+  const arrowDown = <Icon style={styles.arrowDown} name='angle-down' color='#9da1a7' size={18} />;
 
   useEffect(() => {
     return () => props.clearWarn();
   }, [])
 
-  const tryRegister = newUser => {
+  const tryRegister = () => {
+    const newUser = {
+      birthday: Date.parse(new Date(birthYear, birthMonth, birthDay)) || '',
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+      phoneNumber: phoneNumber,
+      gender: gender
+    }
+
     const completedFields = Object.values(newUser).reduce((total, value) => {
       const valueExist = String(value).trim()?.length;
       const valueNotUndefined = String(value) !== 'undefined';
@@ -51,7 +52,6 @@ const Register = props => {
       return total;
     }, 0);
 
-    // console.log(newUser)
     if (completedFields === 7) {
       props.setLoading();
       props.signUp(newUser);
@@ -61,26 +61,30 @@ const Register = props => {
   }
 
   return (
-    <ScrollView contentContainerStyle={s.main}>
-      <View style={s.header}>
+    <ScrollView contentContainerStyle={styles.main}>
+      <View style={styles.header}>
         <TouchableOpacity
-          style={s.backButton}
+          style={styles.backButton}
           activeOpacity={0.5}
           onPress={() => props.navigation.goBack()}
         >
           <Image
-            style={s.arrowIcon}
-            resizeMode="contain"
+            style={styles.arrowIcon}
+            resizeMode='contain'
             source={require('../../assets/img/common/left-arrow.png')}
           />
         </TouchableOpacity>
-        <Text style={s.title}>{strings.fastRegister}</Text>
+        <Text style={styles.title}>
+          {strings.fastRegister}
+        </Text>
       </View>
-      <View style={s.fieldsBox}>
-        <Text style={s.inputTitle}>{strings.firstName}{redStar}</Text>
+      <View style={styles.fieldsBox}>
+        <Text style={styles.inputTitle}>
+          {strings.firstName}{redStar}
+        </Text>
         <TextInput
           disableFullscreenUI
-          style={s.textInput}
+          style={styles.textInput}
           maxLength={40}
           placeholder={strings.firstNamePh}
           returnKeyType='next'
@@ -88,11 +92,13 @@ const Register = props => {
           onChangeText={text => setFirstName(text.replace(/\s/g, ''))}
           onSubmitEditing={() => lastNameRef.current.focus()}
         />
-        <Text style={s.inputTitle}>{strings.lastName}{redStar}</Text>
+        <Text style={styles.inputTitle}>
+          {strings.lastName}{redStar}
+        </Text>
         <TextInput
           ref={lastNameRef}
           disableFullscreenUI
-          style={s.textInput}
+          style={styles.textInput}
           maxLength={40}
           placeholder={strings.lastNamePh}
           returnKeyType='next'
@@ -100,11 +106,13 @@ const Register = props => {
           onChangeText={text => setLastName(text.replace(/\s/g, ''))}
           onSubmitEditing={() => emailRef.current.focus()}
         />
-        <Text style={s.inputTitle}>{strings.email}{redStar}</Text>
+        <Text style={styles.inputTitle}>
+          {strings.email}{redStar}
+        </Text>
         <TextInput
           ref={emailRef}
           disableFullscreenUI
-          style={s.textInput}
+          style={styles.textInput}
           maxLength={50}
           placeholder={strings.emailPh}
           keyboardType='email-address'
@@ -113,11 +121,13 @@ const Register = props => {
           onChangeText={text => setEmail(text.replace(/\s/g, ''))}
           onSubmitEditing={() => passwordRef.current.focus()}
         />
-        <Text style={s.inputTitle}>{strings.password}{redStar}</Text>
+        <Text style={styles.inputTitle}>
+          {strings.password}{redStar}
+        </Text>
         <TextInput
           ref={passwordRef}
           disableFullscreenUI
-          style={s.textInput}
+          style={styles.textInput}
           maxLength={40}
           selectionColor='#a6c3fe'
           placeholder={strings.passwordPh}
@@ -127,11 +137,13 @@ const Register = props => {
           onChangeText={text => setPassword(text.replace(/\s/g, ''))}
           onSubmitEditing={() => phoneRef.current.focus()}
         />
-        <Text style={s.inputTitle}>{strings.phoneTitle}{redStar}</Text>
+        <Text style={styles.inputTitle}>
+          {strings.phoneTitle}{redStar}
+        </Text>
         <TextInput
           ref={phoneRef}
           disableFullscreenUI
-          style={s.textInput}
+          style={styles.textInput}
           maxLength={15}
           placeholder={strings.phonePh}
           keyboardType='phone-pad'
@@ -139,8 +151,10 @@ const Register = props => {
           value={phoneNumber}
           onChangeText={text => setPhoneNumber(text.replace(/\s/g, ''))}
         />
-        <Text style={s.inputTitle}>{strings.birthday}{redStar}</Text>
-        <View style={s.birthdayBox}>
+        <Text style={styles.inputTitle}>
+          {strings.birthday}{redStar}
+        </Text>
+        <View style={styles.birthdayBox}>
           <RNPickerSelect
             style={picker}
             useNativeAndroidPickerStyle={false}
@@ -166,7 +180,9 @@ const Register = props => {
             onValueChange={value => setBirthYear(value)}
           />
         </View>
-        <Text style={s.inputTitle}>{strings.gender}{redStar}</Text>
+        <Text style={styles.inputTitle}>
+          {strings.gender}{redStar}
+        </Text>
         <RNPickerSelect
           style={picker}
           useNativeAndroidPickerStyle={false}
@@ -177,18 +193,21 @@ const Register = props => {
         />
       </View>
       {props.signUpWarn &&
-        <Text style={s.warn}>
+        <Text style={styles.warn}>
           {props.signUpWarn.slice(props.signUpWarn.indexOf(' '))}
         </Text>
       }
-      <View style={s.registerWrapper}>
+      <View style={styles.registerWrapper}>
         <Button
           disabled={props.isLoading}
-          style={s.button}
+          style={styles.button}
           title={strings.registerAndEnter}
           activeOpacity={0.9}
-          icon={props.isLoading ? <ActivityIndicator color='white' /> : null}
-          onPress={() => tryRegister(newUser)}
+          icon={props.isLoading
+            ? <ActivityIndicator color='white' />
+            : null
+          }
+          onPress={() => tryRegister()}
         />
       </View>
     </ScrollView>
@@ -207,7 +226,7 @@ export default connect(
   }
 )(Register);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   main: {
     flexGrow: 1,
     backgroundColor: 'white',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Image, StatusBar } from 'react-native';
 import { ProgressBar } from '../../components/ProgressBar';
 import { NutritionDetails } from '../../components/NutritionDetails';
@@ -14,10 +14,10 @@ const FoodDailyInfo = props => {
     setMicroPercent(calculateMicroPercent());
   }, [props.foodDailyInfo.micronutrients])
 
-  const calculateMicroPercent = useCallback(() => {
+  const calculateMicroPercent = () => {
     const micronutrients = props.foodDailyInfo.micronutrients;
     const microPercents = {};
-    
+
     if (!micronutrients)
       return;
 
@@ -29,125 +29,135 @@ const FoodDailyInfo = props => {
     })
 
     return microPercents;
-  }, [props.foodDailyInfo.micronutrients])
+  }
 
   return (
-    <ScrollView contentContainerStyle={s.main}>
+    <ScrollView contentContainerStyle={styles.main}>
       <StatusBar
         barStyle='dark-content'
-        backgroundColor="white"
+        backgroundColor='white'
       />
-      <View style={s.header}>
+      <View style={styles.header}>
         <TouchableOpacity
-          style={s.backButton}
+          style={styles.backButton}
           activeOpacity={0.5}
           onPress={() => props.navigation.goBack()}
         >
           <Image
-            style={s.arrowIcon}
-            resizeMode="contain"
+            style={styles.arrowIcon}
+            resizeMode='contain'
             source={require('../../assets/img/common/left-arrow.png')}
           />
         </TouchableOpacity>
-        <Text style={s.title}>{strings.totalForDay}</Text>
+        <Text style={styles.title}>{strings.totalForDay}</Text>
       </View>
-      <View style={s.energyValueContainer}>
-        <View style={s.energyValueBox}>
-          <Text style={s.energyValueTitle}>{strings.proteins}</Text>
-          <Text style={s.energyValue}>
+      <View style={styles.energyValueContainer}>
+        <View style={styles.energyValueBox}>
+          <Text style={styles.energyValueTitle}>
+            {strings.proteins}
+          </Text>
+          <Text style={styles.energyValue}>
             {strings.formatString(strings.gramFs, props.foodDailyInfo.values?.proteins.toFixed(1) || 0)}
           </Text>
           <ProgressBar
-            style={s.progress}
+            style={styles.progress}
             progress={props.foodDailyInfo.progress?.proteins}
           />
-          <View style={s.qualityBox}>
+          <View style={styles.qualityBox}>
             <Image
               source={require('../../assets/img/food/proteins-quality-icon.png')}
-              resizeMode="contain"
-              style={s.proteinsQualityIcon}
+              resizeMode='contain'
+              style={styles.proteinsQualityIcon}
             />
-            <Text style={s.qualityText}>
+            <Text style={styles.qualityText}>
               {props.foodDailyInfo?.proteinsQuality?.toFixed(1) || '-'}
             </Text>
           </View>
         </View>
-        <View style={s.energyValueBox}>
-          <Text style={s.energyValueTitle}>{strings.fats}</Text>
-          <Text style={s.energyValue}>
+        <View style={styles.energyValueBox}>
+          <Text style={styles.energyValueTitle}>
+            {strings.fats}
+          </Text>
+          <Text style={styles.energyValue}>
             {strings.formatString(strings.gramFs, props.foodDailyInfo.values?.fats.toFixed(1) || 0)}
           </Text>
           <ProgressBar
-            style={s.progress}
+            style={styles.progress}
             progress={props.foodDailyInfo.progress?.fats}
           />
-          <View style={s.qualityBox}>
+          <View style={styles.qualityBox}>
             <Image
               source={require('../../assets/img/food/fats-quality-icon.png')}
-              resizeMode="contain"
-              style={s.fatsQualityIcon}
+              resizeMode='contain'
+              style={styles.fatsQualityIcon}
             />
-            <Text style={s.qualityText}>
+            <Text style={styles.qualityText}>
               {props.foodDailyInfo?.fatsQuality?.toFixed(1) || '-'}
             </Text>
           </View>
         </View>
-        <View style={s.energyValueBox}>
-          <Text style={s.energyValueTitle}>{strings.carbsShort}</Text>
-          <Text style={s.energyValue}>
+        <View style={styles.energyValueBox}>
+          <Text style={styles.energyValueTitle}>
+            {strings.carbsShort}
+          </Text>
+          <Text style={styles.energyValue}>
             {strings.formatString(strings.gramFs, props.foodDailyInfo.values?.carbs?.toFixed(1) || 0)}
           </Text>
           <ProgressBar
-            style={s.progress}
+            style={styles.progress}
             progress={props.foodDailyInfo.progress?.carbs}
           />
-          <View style={s.qualityBox}>
+          <View style={styles.qualityBox}>
             <Image
               source={require('../../assets/img/food/carbs-quality-icon.png')}
-              resizeMode="contain"
-              style={s.carbsQualityIcon}
+              resizeMode='contain'
+              style={styles.carbsQualityIcon}
             />
-            <Text style={s.qualityText}>
+            <Text style={styles.qualityText}>
               {props.foodDailyInfo?.carbsQuality?.toFixed(1) || '-'}
             </Text>
           </View>
         </View>
-        <View style={s.energyValueBox2}>
-          <Text style={s.energyValueTitle}>{strings.calories}</Text>
-          <Text style={s.energyValue}>
+        <View style={styles.energyValueBox2}>
+          <Text style={styles.energyValueTitle}>
+            {strings.calories}
+          </Text>
+          <Text style={styles.energyValue}>
             {strings.formatString(strings.kcalFs, props.foodDailyInfo.values?.calories?.toFixed(0) || 0)}
           </Text>
           <ProgressBar
-            style={s.progress}
+            style={styles.progress}
             progress={props.foodDailyInfo.progress?.calories}
           />
-          <View style={s.qualityBox}>
+          <View style={styles.qualityBox}>
             <Image
               source={require('../../assets/img/food/vitamins-quality-icon.png')}
-              resizeMode="contain"
-              style={s.vitaminsQualityIcon}
+              resizeMode='contain'
+              style={styles.vitaminsQualityIcon}
             />
-            <Text style={s.qualityText}>
+            <Text style={styles.qualityText}>
               {props.foodDailyInfo?.microIndex?.toFixed(0) || '-'}
             </Text>
           </View>
         </View>
-        <View style={s.energyValueBox}>
-          <Text style={s.energyValueTitle}>{strings.water}</Text>
-          <Text style={s.energyValue}>
+        <View style={styles.energyValueBox}>
+          <Text style={styles.energyValueTitle}>
+            {strings.water}
+          </Text>
+          <Text style={styles.energyValue}>
             {strings.formatString(strings.amountFs, props.foodDailyInfo.values?.water?.toFixed(0) || 0)}
           </Text>
           <ProgressBar
-            style={s.progress}
+            style={styles.progress}
             progress={props.foodDailyInfo.progress?.water}
           />
-          <View style={s.qualityBox}>
+          <View style={styles.qualityBox}>
             <Image
               source={require('../../assets/img/food/water-quality-icon2.png')}
-              resizeMode="contain"
-              style={s.waterQualityIcon}
+              resizeMode='contain'
+              style={styles.waterQualityIcon}
             />
-            <Text style={s.qualityText}>
+            <Text style={styles.qualityText}>
               {props.foodDailyInfo?.waterIndex?.toFixed(0) || '-'}
             </Text>
           </View>
@@ -155,7 +165,13 @@ const FoodDailyInfo = props => {
       </View>
       <NutritionDetails
         index={index}
-        buttons={[strings.microInfo, strings.aminoInfo, strings.fattyInfo, strings.sacchInfo, strings.water]}
+        buttons={[
+          strings.microInfo,
+          strings.aminoInfo,
+          strings.fattyInfo,
+          strings.sacchInfo,
+          strings.water
+        ]}
         proteins={props.foodDailyInfo.values?.proteins}
         fats={props.foodDailyInfo.values?.fats}
         carbs={props.foodDailyInfo.values?.carbs}
@@ -176,7 +192,7 @@ export default connect(
   })
 )(FoodDailyInfo);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   main: {
     flexGrow: 1,
     backgroundColor: 'white',

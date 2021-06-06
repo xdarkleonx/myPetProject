@@ -172,42 +172,44 @@ const NutrientsFilter = props => {
   }
 
   return (
-    <ScrollView contentContainerStyle={s.main}>
-      <View style={s.header}>
+    <ScrollView contentContainerStyle={styles.main}>
+      <View style={styles.header}>
         <TouchableOpacity
-          style={s.backButton}
+          style={styles.backButton}
           activeOpacity={0.5}
           onPress={navigation.goBack}
         >
           <Image
-            style={s.arrowIcon}
-            resizeMode="contain"
+            style={styles.arrowIcon}
+            resizeMode='contain'
             source={require('../../assets/img/common/left-arrow.png')}
           />
         </TouchableOpacity>
-        <Text style={s.title}>{strings.filterNutrients}</Text>
+        <Text style={styles.title}>{strings.filterNutrients}</Text>
       </View>
-      <Text style={s.filterText2}>{strings.species}</Text>
+      <Text style={styles.filterText2}>{strings.species}</Text>
       <ButtonsGroup
         toggle
-        style={s.buttonsGroup}
+        style={styles.buttonsGroup}
         buttonStyle='TouchableOpacity'
         buttons={[strings.products, strings.dishes]}
         selectedIndex={getSpeciesFilter}
         onPress={index => setSpeciesFilter(index)} />
-      <Text style={s.filterText}>{strings.nutrientType}</Text>
+      <Text style={styles.filterText}>{strings.nutrientType}</Text>
       <ButtonsGroup
         toggle
-        style={s.buttonsGroup}
+        style={styles.buttonsGroup}
         buttonStyle='TouchableOpacity'
         buttons={[strings.proteinType, strings.fatType, strings.carbType]}
         selectedIndex={getTypeFilter}
         onPress={index => setTypeFilter(index)} />
-      <Text style={s.filterText}>{strings.vitamins}</Text>
-      <View style={s.filterBox}>
+      <Text style={styles.filterText}>
+        {strings.vitamins}
+      </Text>
+      <View style={styles.filterBox}>
         <Button
           toggle
-          style={s.filterButton}
+          style={styles.filterButton}
           debounce={false}
           title='C'
           checked={() => getMicroNutrientsFilter('C', 'vitamins')}
@@ -215,219 +217,219 @@ const NutrientsFilter = props => {
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='B1'
           checked={() => getMicroNutrientsFilter('B1', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('B1', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='B2'
           checked={() => getMicroNutrientsFilter('B2', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('B2', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='B4'
           checked={() => getMicroNutrientsFilter('B4', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('B4', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='B5'
           checked={() => getMicroNutrientsFilter('B5', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('B5', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='B6'
           checked={() => getMicroNutrientsFilter('B6', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('B6', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='B9'
           checked={() => getMicroNutrientsFilter('B9', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('B9', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='B12'
           checked={() => getMicroNutrientsFilter('B12', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('B12', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='PP'
           checked={() => getMicroNutrientsFilter('PP', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('PP', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='H'
           checked={() => getMicroNutrientsFilter('H', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('H', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterLastButton}
+          style={styles.filterLastButton}
           title='A'
           checked={() => getMicroNutrientsFilter('A', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('A', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterLastButton}
+          style={styles.filterLastButton}
           title='Кар.'
           checked={() => getMicroNutrientsFilter('Кар', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('Кар', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterLastButton}
+          style={styles.filterLastButton}
           title='E'
           checked={() => getMicroNutrientsFilter('E', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('E', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterLastButton}
+          style={styles.filterLastButton}
           title='D'
           checked={() => getMicroNutrientsFilter('D', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('D', 'vitamins')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterLastButton}
+          style={styles.filterLastButton}
           title='K'
           checked={() => getMicroNutrientsFilter('K', 'vitamins')}
           onPress={() => setMicroNutrientsFilter('K', 'vitamins')} />
       </View>
-      <Text style={s.filterText}>{strings.minerals}</Text>
-      <View style={s.filterBox}>
+      <Text style={styles.filterText}>{strings.minerals}</Text>
+      <View style={styles.filterBox}>
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Ca'
           checked={() => getMicroNutrientsFilter('Ca', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Ca', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='P'
           checked={() => getMicroNutrientsFilter('P', 'minerals')}
           onPress={() => setMicroNutrientsFilter('P', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Mg'
           checked={() => getMicroNutrientsFilter('Mg', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Mg', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='K'
           checked={() => getMicroNutrientsFilter('K', 'minerals')}
           onPress={() => setMicroNutrientsFilter('K', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Na'
           checked={() => getMicroNutrientsFilter('Na', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Na', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Cl'
           checked={() => getMicroNutrientsFilter('Cl', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Cl', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Fe'
           checked={() => getMicroNutrientsFilter('Fe', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Fe', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Zn'
           checked={() => getMicroNutrientsFilter('Zn', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Zn', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='I'
           checked={() => getMicroNutrientsFilter('I', 'minerals')}
           onPress={() => setMicroNutrientsFilter('I', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Cu'
           checked={() => getMicroNutrientsFilter('Cu', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Cu', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Mn'
           checked={() => getMicroNutrientsFilter('Mn', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Mn', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Se'
           checked={() => getMicroNutrientsFilter('Se', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Se', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Cr'
           checked={() => getMicroNutrientsFilter('Cr', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Cr', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='Mo'
           checked={() => getMicroNutrientsFilter('Mo', 'minerals')}
           onPress={() => setMicroNutrientsFilter('Mo', 'minerals')} />
         <Button
           toggle
           debounce={false}
-          style={s.filterButton}
+          style={styles.filterButton}
           title='F'
           checked={() => getMicroNutrientsFilter('F', 'minerals')}
           onPress={() => setMicroNutrientsFilter('F', 'minerals')} />
       </View>
-      <View style={s.bottomBox}>
-        <View style={s.row}>
+      <View style={styles.bottomBox}>
+        <View style={styles.row}>
           <Button
-            style={s.bottomButton}
+            style={styles.bottomButton}
             title={strings.reset}
             onPress={resetFilters}
           />
           <Button
-            style={s.bottomButton}
+            style={styles.bottomButton}
             title={strings.accept}
             onPress={setSelectedFilters}
           />
@@ -451,7 +453,7 @@ export default connect(
   }
 )(NutrientsFilter);
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   main: {
     flexGrow: 1,
     backgroundColor: 'white',
